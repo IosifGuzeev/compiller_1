@@ -156,15 +156,13 @@ def stepSixV() -> None:  # Возврат отмена текущей альте
     L1.pop()
 
 
-def main():
+def main(input_statement):
     global x, y, LR, RR, L1, L2
     end: bool = False
     # вывод грамматики
     for i in range(8):
         print(f'{i + 1}: {LR[i]} -> {RR[i]}')
-    str_: str = ' ' * 100
-    print("Input your line: ")
-    str_ = "!a*(a+b)!"
+    str_ = input_statement
     print(str_)
     n: int = len(str_)
     i: int = 0
@@ -176,10 +174,8 @@ def main():
     L2.append(copy(y))
     k += 1
     while True:
-        print(L2)
         if sos == 't':  # конец алгоритма сформировать результат
-            print(f"Excellent: {result[::-1]}")
-            end = True
+            return ' '.join([str(num) for num in result[::-1]])
         elif sos == 'q':  # в процессе
             y = copy(L2[-1])
             if findNet(y.symv) != -1:
@@ -201,7 +197,6 @@ def main():
                     sos = 'b'  # Якобы шаг 4
         elif sos == 'b':  # возврат
             x = copy(L1[-1])
-            print(x)
             if findTerm(x.symv) != -1:
                 stepFive()
                 i -= 1
@@ -211,14 +206,10 @@ def main():
                     sos = 'q'
                 else:
                     if x.symv == S and i == 0:
-                        print("Error")  # якобы шаг 6б
-                        end = True
+                        raise Exception("Error")  # якобы шаг 6б
                     else:
                         stepSixV()
-        if end == True:
-            break
-    return None
 
 
 if __name__ == '__main__':
-    main()
+    main("!a*(a+b)!")
